@@ -1,0 +1,14 @@
+image:
+  repository: optix.azurecr.io/optix-app
+  tag: mcr.microsoft.com/dotnet/samples:aspnetapp
+  # pullSecret: acr-secret 
+
+replicaCount: 2
+
+service:
+  name: optix-app
+  port: 80
+
+ingress:
+  enabled: true
+  className: azure-application-gateway

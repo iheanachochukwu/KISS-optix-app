@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "optix.fullname" . }}
+  labels:
+    app: {{ include "optix.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "optix.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "optix.name" . }}
+    spec:
+      # imagePullSecrets:
+      # - name: {{ .Values.image.pullSecret }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+

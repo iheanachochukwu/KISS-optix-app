@@ -1,0 +1,14 @@
+variables:
+  ARM_CLIENT_ID: 'dff861d4-1f37-4873-8c34-98c2151433a6'
+  ARM_TENANT_ID: '25f7afa6-4f04-40ac-90a5-fdf82fbcee9e'
+  ARM_SUBSCRIPTION_ID: '4f3f4052-a29a-4988-9f42-8c20c81ea86d'
+  RESOURCE_GROUP_NAME: 'optix_rg'
+  CLUSTER_NAME: 'optix-aks'
+  tags: $(Build.BuildId)
+  AZURE_CONNECTION: azure-cr
+  repository: optix-app
+  azure_svc: sam
+  CHART: charts/optix
+  VALUES: charts/optix/values.yaml
+  NAMESPACE: optix
+  RELEASE: optixdeploy

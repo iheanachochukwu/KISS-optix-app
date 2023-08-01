@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: optix-app
+  labels:
+    app: optix-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: optix-app
+  template:
+    metadata:
+      labels:
+        app: optix-app
+    spec:
+      imagePullSecrets:
+      - name: acr-secret
+      containers:
+      - name: optix-app
+        image: optix.azurecr.io/optix-app:newaspnetapp
+
+---        
+apiVersion: v1
+kind: Service
+metadata:
+  name: optix-app
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: optix-app
+  #sessionAffinity: None
+  #type: LoadBalancer
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: optix
+  #annotations:
+    #kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  ingressClassName: azure-application-gateway
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          service:
+            name: optix-app
+            port:
+              number: 80
+        pathType: Exact

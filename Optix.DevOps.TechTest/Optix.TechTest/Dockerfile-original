@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+COPY ["Optix.TechTest/Optix.TechTest.csproj", "Optix.TechTest/"]
+COPY ["Optix.TechTest.Tests/Optix.TechTest.Tests.csproj", "Optix.TechTest.Tests/"]
+RUN dotnet restore "Optix.TechTest/Optix.TechTest.csproj"
+COPY . .
+WORKDIR "/app/Optix.TechTest"
+RUN dotnet build "Optix.TechTest.csproj" -c Release -o /app/build
+RUN dotnet publish "Optix.TechTest.csproj" -c Release -o /app/publish /p:UseAppHost=false
+WORKDIR "/app"
+RUN dotnet test --results-directory /testresults --logger "trx;LogFileName=tests.trx" /p:CollectCoverage=true /p:CoverletOutputFormat=json%2cCobertura /p:CoverletOutput=/testresults/coverage/ -p:MergeWith=/testresults/coverage/coverage.json  Optix.TechTest.Tests/Optix.TechTest.Tests.csproj
+ENTRYPOINT ["dotnet", "Optix.TechTest.dll"]
